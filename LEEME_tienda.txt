@@ -1,0 +1,38 @@
+TIENDA ON-LAB CON PAGOS EN LÍNEA (Mercado Pago)
+================================================
+
+La tienda cobra con Mercado Pago (tarjeta, OXXO y saldo Mercado Pago).
+Para que el cobro funcione, el sitio debe publicarse desde GitHub (no con
+arrastrar y soltar), porque usa una función segura en Netlify.
+
+1) MERCADO PAGO – obtener tu clave
+   - Entra a mercadopago.com.mx/developers/panel con tu cuenta de vendedor.
+   - "Crear aplicación" -> tipo de integración: Pagos en línea / Checkout Pro.
+   - En "Credenciales de producción" copia el ACCESS TOKEN (empieza con APP_USR-).
+   - Primero puedes probar con las "Credenciales de prueba" (TEST-...).
+   - NUNCA compartas este token ni lo pegues dentro de los archivos.
+
+2) GITHUB – subir los archivos
+   - Crea una cuenta gratis en github.com.
+   - "New repository" -> nombre: onlab-web -> Create.
+   - "uploading an existing file" -> arrastra TODO el contenido de esta carpeta
+     (incluida la carpeta netlify y el archivo netlify.toml) -> Commit changes.
+
+3) NETLIFY – conectar el repositorio a tu sitio onlabmex
+   - Entra a tu sitio onlabmex -> Site configuration -> Build & deploy
+     -> Continuous deployment -> Link repository -> GitHub -> onlab-web.
+   - Deja la configuración que propone (el archivo netlify.toml ya la trae).
+
+4) NETLIFY – guardar tu clave de Mercado Pago
+   - Site configuration -> Environment variables -> Add a variable
+   - Key: MP_ACCESS_TOKEN    Value: tu Access Token
+   - Guarda y ve a Deploys -> Trigger deploy -> Deploy site.
+
+5) PROBAR
+   - Abre onlabmex.netlify.app/tienda.html, agrega un producto y da "Pagar ahora".
+   - Con credenciales de prueba usa las tarjetas de prueba de Mercado Pago.
+   - Cuando todo funcione, cambia la variable por el token de producción.
+
+CAMBIAR PRECIOS
+   - Edita el precio en productos.js (lo que ve el cliente)
+     Y en netlify/functions/checkout.js (lo que se cobra). Deben coincidir.

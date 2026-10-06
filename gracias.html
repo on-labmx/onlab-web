@@ -1,0 +1,34 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>On-Lab · Gracias por tu compra</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap">
+<style>
+:root{--bl:#2A8BFF;--nv:#0E1A2B;--bg:#F2F6FB;--card:#fff;--mut:#4A5568;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--nv:#F1F5FB;--bg:#0B1320;--card:#14213A;--mut:#A9B6C8}}
+:root[data-theme="dark"]{--nv:#F1F5FB;--bg:#0B1320;--card:#14213A;--mut:#A9B6C8}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--nv);font-family:Montserrat,'Helvetica Neue',Arial,sans-serif}
+.top{background:var(--bl);color:#fff;padding:44px 22px 70px;text-align:center}
+.top h1{margin:0;font-size:1.8rem;font-weight:900} .top p{margin:10px auto 0;max-width:40ch;line-height:1.45}
+main{max-width:520px;margin:-40px auto 0;padding:0 18px 40px;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border-radius:18px;padding:20px;box-shadow:0 2px 10px rgba(14,26,43,.08)}
+.card h2{margin:0 0 10px;font-size:1.05rem} .l{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;padding:4px 0}
+.btn{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:14px;text-decoration:none;font-weight:800}
+.wa{background:#1DA851;color:#fff} .sec{border:2px solid var(--bl);color:var(--nv)}
+</style></head><body>
+<header class="top"><h1 id="t">¡Gracias por tu compra!</h1><p id="s"></p></header>
+<main><section class="card" id="res" hidden><h2>Tu pedido</h2><div id="list"></div></section>
+<a class="btn wa" id="wa" href="https://wa.me/528681373756" target="_blank" rel="noopener">Confirmar entrega por WhatsApp</a>
+<a class="btn sec" href="tienda.html">Volver a la tienda</a></main>
+<script>
+const st=new URLSearchParams(location.search).get("estado")||"aprobado";
+const T={aprobado:["¡Gracias por tu compra!","Tu pago fue aprobado. Mándanos un WhatsApp para agendar día y hora de entrega."],
+pendiente:["Tu pago está en proceso","Si pagaste en OXXO, se confirma en unas horas. Te avisamos por WhatsApp en cuanto se acredite."],
+rechazado:["No se pudo completar el pago","Puedes intentarlo de nuevo o pedir por WhatsApp y te ayudamos."]};
+document.getElementById("t").textContent=T[st][0];document.getElementById("s").textContent=T[st][1];
+let d=null;try{d=JSON.parse(localStorage.getItem("onlab-last-order")||"null")}catch(e){}
+const fmt=n=>"$"+n.toLocaleString("es-MX");
+if(d){document.getElementById("res").hidden=false;document.getElementById("list").innerHTML=d.lines.map(x=>`<div class="l"><span>${x.q} x ${x.n}${x.opt?" ("+x.opt+")":""}</span><b>${fmt(x.t)}</b></div>`).join("")+`<div class="l"><span>Entrega: ${d.o.entrega}</span><b>Total ${fmt(d.total)}</b></div>`;
+ const msg=(st==="aprobado"?"Hola On-Lab 👟, ya pagué mi pedido en la tienda en línea:":"Hola On-Lab 👟, tengo este pedido de la tienda en línea:")+"\n\n"+d.lines.map(x=>`• ${x.q} x ${x.n}${x.opt?" ("+x.opt+")":""}`).join("\n")+`\n\nTotal: ${fmt(d.total)}\nEntrega: ${d.o.entrega}\nNombre: ${d.o.nombre}`;
+ document.getElementById("wa").href="https://wa.me/528681373756?text="+encodeURIComponent(msg);}
+if(st==="aprobado"||st==="pendiente"){try{localStorage.removeItem("onlab-cart2")}catch(e){}}
+</script></body></html>
